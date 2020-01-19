@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'listTodo.dart';
+// import 'listTodo.dart';
 class ModalDialog extends StatefulWidget {
   @override
   _ModalDialogState createState() => _ModalDialogState();
@@ -7,10 +7,13 @@ class ModalDialog extends StatefulWidget {
 
 class _ModalDialogState extends State<ModalDialog> {
   TextEditingController _toDoController = TextEditingController();
+   Map <String,bool> todos = Map<String, bool>();
+
   String _showText = "";
-  void _getListTodo() {
+  void getListTodo() {
     setState(() {
       _showText = _toDoController.text;
+      todos[_showText] = false;
     });
   }
   //function for create modal dialog
@@ -23,6 +26,7 @@ class _ModalDialogState extends State<ModalDialog> {
             content: TextField(
               autofocus: true,
               controller: _toDoController,
+              
             ),
             actions: <Widget>[
               // material button (add) in modal dialog
@@ -39,8 +43,9 @@ class _ModalDialogState extends State<ModalDialog> {
                   style: TextStyle(color: Colors.blue),
                 ),
                 onPressed: () {
-                  _getListTodo();
+                  getListTodo();
                   Navigator.of(context).pop();
+                  _toDoController.clear();
                 },
               ),
             ],
@@ -54,9 +59,19 @@ class _ModalDialogState extends State<ModalDialog> {
       appBar: AppBar(
         title: Text("Todo List"),
       ),
-      body: Center(
-        child: Text(_showText),
-      ),
+      body: ListView(
+          children: todos.keys.map((String key){
+            return CheckboxListTile(
+              title: Text(key),
+              value: todos[key],
+              onChanged: (bool value){
+                setState(() {
+                  todos[key] = value;
+                });
+              },
+            );
+          }).toList(),
+        ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
