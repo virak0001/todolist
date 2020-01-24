@@ -20,7 +20,6 @@ class _DiesplayListState extends State<DiesplayList> {
             content: TextField(
               autofocus: true,
               controller: controller,
-              
             ),
             actions: <Widget>[
               // material button (add) in modal dialog
@@ -38,8 +37,10 @@ class _DiesplayListState extends State<DiesplayList> {
                 ),
                 onPressed: () {
                   final todo = new Todo(title: controller.value.text);
+                  if (todo.title != "") {
+                    Navigator.of(context).pop(todo);
+                  }
                   controller.clear();
-                  Navigator.of(context).pop(todo);
                 },
               ),
             ],
@@ -58,7 +59,7 @@ class _DiesplayListState extends State<DiesplayList> {
       value: todo.isDone,
       title: Text(todo.title),
        onChanged: (bool value){
-        setState(() {
+          setState(() {
           todo.isDone = value;
         });
       },
